@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Running Resources Monitoring Dashboard</title>
+  <meta name="description" content="Premium real-time AWS Cloud resource monitoring dashboard with live health stats, dynamic metrics, and alerts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar-navigation">
+      <div class="sidebar-header">
+        <div class="aws-logo-container">
+          <svg class="aws-logo" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M49.6 12.8c-2.3 0-4 .9-5 2.7l-13 23c-1.4 2.5-1 5.7 1 7.7 2 2 5.2 2.4 7.7 1L50 41.5l9.7 5.7c2.5 1.4 5.7 1 7.7-1 2-2 2.4-5.2 1-7.7l-13-23c-1-1.8-2.7-2.7-5.8-2.7z" fill="#FF9900"/>
+            <path d="M8 46c10 8 28 12 42 12s32-4 42-12c-5 3-19 7-42 7S13 49 8 46z" fill="#FF9900"/>
+            <path d="M84 42c4-3 6-7 6-11 0-7-6-13-14-13s-14 6-14 13c0 4 2 8 6 11l-3 4c-5-4-8-10-8-16 0-10 9-19 20-19s20 9 20 19c0 6-3 12-8 16l-3-4z" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <button class="hamburger-btn" aria-label="Toggle Sidebar Menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <ul>
+          <li>
+            <a href="#" class="menu-item" id="menu-overview">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </span>
+              <span class="menu-text">Overview</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-item active" id="menu-resources">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+              </span>
+              <span class="menu-text">Running Resources</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-item" id="menu-health">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              </span>
+              <span class="menu-text">Health Check</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-item" id="menu-alerts">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              </span>
+              <span class="menu-text">Alerts</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-item" id="menu-logs">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </span>
+              <span class="menu-text">Logs</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-item" id="menu-settings">
+              <span class="menu-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              </span>
+              <span class="menu-text">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Sidebar Footer Settings -->
+      <div class="sidebar-footer">
+        <div class="theme-toggle-container">
+          <span class="theme-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </span>
+          <span class="theme-label">Dark Mode</span>
+          <label class="switch-toggle" for="dark-mode-input">
+            <input type="checkbox" id="dark-mode-input">
+            <span class="slider-round"></span>
+          </label>
+        </div>
+
+        <div class="account-selector-container">
+          <div class="account-selector-trigger" id="account-dropdown-btn">
+            <div class="account-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="account-info">
+              <span class="account-name">AWS Account</span>
+              <span class="account-id">1234-5678-9012</span>
+            </div>
+            <div class="account-arrow">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Area -->
+    <main class="main-content">
+      
+      <!-- Top Action Bar -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <span class="breadcrumb-title">Running Resources</span>
+        </div>
+        <div class="top-bar-right">
+          <button class="action-icon-btn" id="manual-refresh-btn" aria-label="Refresh metrics">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          </button>
+          
+          <div class="dropdown-container">
+            <select class="custom-select select-refresh" id="auto-refresh-select" aria-label="Auto refresh interval">
+              <option value="15">Auto refresh: 15 sec</option>
+              <option value="30">Auto refresh: 30 sec</option>
+              <option value="60">Auto refresh: 60 sec</option>
+              <option value="0">Manual only</option>
+            </select>
+          </div>
+
+          <div class="dropdown-container">
+            <select class="custom-select select-region-global" id="region-global-select" aria-label="AWS Region select">
+              <option value="all">📍 All Regions</option>
+              <option value="ap-south-1">ap-south-1 (Mumbai)</option>
+              <option value="us-east-1">us-east-1 (N. Virginia)</option>
+              <option value="eu-west-1">eu-west-1 (Ireland)</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Dashboard Workspace -->
+      <section class="dashboard-body">
+        
+        <div class="dashboard-header">
+          <h1 class="page-title">Running Resources</h1>
+          <p class="page-subtitle">View all currently running resources and their health status</p>
+        </div>
+
+        <!-- Global Summary Grid Cards -->
+        <div class="summary-grid" id="summary-cards">
+          <div class="summary-card total">
+            <div class="summary-card-inner">
+              <div class="summary-card-info">
+                <span class="card-label">Total Running</span>
+                <span class="card-val" id="summary-total-val">--</span>
+                <span class="card-desc">Across all services</span>
+              </div>
+              <div class="card-icon-container bg-blue">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card healthy">
+            <div class="summary-card-inner">
+              <div class="summary-card-info">
+                <span class="card-label">Healthy</span>
+                <span class="card-val" id="summary-healthy-val">--</span>
+                <span class="card-desc" id="summary-healthy-pct">--%</span>
+              </div>
+              <div class="card-icon-container bg-green">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card degraded">
+            <div class="summary-card-inner">
+              <div class="summary-card-info">
+                <span class="card-label">Degraded</span>
+                <span class="card-val" id="summary-degraded-val">--</span>
+                <span class="card-desc" id="summary-degraded-pct">--%</span>
+              </div>
+              <div class="card-icon-container bg-orange">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card unhealthy">
+            <div class="summary-card-inner">
+              <div class="summary-card-info">
+                <span class="card-label">Unhealthy</span>
+                <span class="card-val" id="summary-unhealthy-val">--</span>
+                <span class="card-desc" id="summary-unhealthy-pct">--%</span>
+              </div>
+              <div class="card-icon-container bg-red">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter and Search Bar Controls -->
+        <div class="filter-bar">
+          <div class="filter-search-container">
+            <span class="search-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input type="text" id="search-input" placeholder="Search by name or ID..." aria-label="Search resources">
+          </div>
+
+          <div class="filter-dropdowns">
+            <select class="filter-select" id="service-filter" aria-label="Filter by Service">
+              <option value="all">All Services</option>
+              <option value="EC2">EC2 Instances</option>
+              <option value="RDS">RDS Instances</option>
+              <option value="Lambda">Lambda Functions</option>
+              <option value="S3">S3 Buckets</option>
+              <option value="DynamoDB">DynamoDB Tables</option>
+              <option value="ElastiCache">ElastiCache Clusters</option>
+              <option value="ECS">ECS Services</option>
+              <option value="CloudFront">CloudFront Dist.</option>
+            </select>
+
+            <select class="filter-select" id="region-filter" aria-label="Filter by Region">
+              <option value="all">All Regions</option>
+              <option value="ap-south-1">ap-south-1</option>
+              <option value="us-east-1">us-east-1</option>
+            </select>
+
+            <select class="filter-select" id="status-filter" aria-label="Filter by Status">
+              <option value="all">All Status</option>
+              <option value="Healthy">Healthy</option>
+              <option value="Degraded">Degraded</option>
+              <option value="Unhealthy">Unhealthy</option>
+            </select>
+          </div>
+
+          <div class="layout-toggle-btns">
+            <button class="layout-btn active" id="layout-grid-btn" aria-label="Grid Layout">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </button>
+            <button class="layout-btn" id="layout-list-btn" aria-label="List Layout">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Resources Cards Grid -->
+        <div class="resources-grid" id="resources-grid-container">
+          <div class="skeleton-loader-card"></div>
+          <div class="skeleton-loader-card"></div>
+          <div class="skeleton-loader-card"></div>
+          <div class="skeleton-loader-card"></div>
+        </div>
+
+        <!-- Health Check Status Section -->
+        <div class="health-check-section">
+          <div class="health-check-header">
+            <h2>Health Check Status</h2>
+            <button class="view-all-btn" id="health-view-all-btn">View All</button>
+          </div>
+
+          <div class="table-container">
+            <table class="health-table">
+              <thead>
+                <tr>
+                  <th>Resource Name</th>
+                  <th>Service</th>
+                  <th>Region</th>
+                  <th>Status</th>
+                  <th>Last Check</th>
+                  <th>Details</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="health-check-tbody">
+                <tr>
+                  <td colspan="7" class="table-loading">Loading health status...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
